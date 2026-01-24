@@ -446,10 +446,10 @@
     
     <script>
         // Configuration - UPDATE THESE WITH YOUR ACTUAL VALUES
-       const CONFIG = {
-     SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbwgny3JcjvgWTr8ZFvYBRWSfDwducsHInYwR-l_H83gJ1V6jWmkHNNWC6Njs7q4aoetPg/exec',
-     SHEET_ID: '14oBUZp-fe88ENXa-jXRCCLRQhtj3omjhWfFk_wXyqCE'
-   };
+        const CONFIG = {
+            SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbwgny3JcjvgWTr8ZFvYBRWSfDwducsHInYwR-l_H83gJ1V6jWmkHNNWC6Njs7q4aoetPg/exec',
+            SHEET_ID: '14oBUZp-fe88ENXa-jXRCCLRQhtj3omjhWfFk_wXyqCE'
+        };
         
         // Supply categories with default descriptions
         const SUPPLY_CATEGORIES = {
@@ -487,38 +487,38 @@
             }
         };
         
-        // DEMO DATA - Hardcoded for proof of concept
-        let boxData = {
-            child_name: 'Emma',
-            age: 7,
-            gender: 'Girl',
-            theme: 'Unicorns & Rainbows',
-            colors: 'Pink, Purple',
-            language: 'English',
-            allergies: 'No known allergies',
-            gift_ideas: 'Unicorn toys, craft supplies, art sets, books about magical creatures',
-            sizes: '7/8',
-            volunteer_notes: 'Emma loves all things sparkly and magical! She enjoys drawing and crafts. Very sweet and creative girl.',
-            drop_off_location: '(WEST) 3506 Country Grove Dr, Madison, WI 53719 (box outside on front porch)',
-            due_date: 'Wednesday, January 29, 2026',
-            dessert_preference: '12 frosted cupcakes',
-            needed_items: ['tableware', 'activity', 'decorations', 'party_favors', 'diy_decorations', 'unwrapped_gift', 'box_decorations', 'dessert']
-        };
-        
+        let boxData = null;
         let selectedItems = new Set();
         
         // Get box ID from URL parameter
         function getBoxId() {
             const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get('box') || 'demo-emma-12345';
+            return urlParams.get('box');
         }
         
-        // Load box data (now using demo data)
+        // Load box data from server
         async function loadBoxData() {
-            // Simulate loading delay for realism
-            setTimeout(() => {
+            const boxId = getBoxId();
+            if (!boxId) {
+                showError('No box ID provided in URL');
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${CONFIG.SCRIPT_URL}?action=getBox&boxId=${boxId}`);
+                const data = await response.json();
+                
+                if (data.error) {
+                    showError(data.error);
+                    return;
+                }
+                
+                boxData = data;
                 renderBoxDetails();
-            }, 500);
+            } catch (error) {
+                showError('Failed to load box details. Please try again later.');
+                console.error(error);
+            }
         }
         
         // Render the box details and sign-up form
@@ -706,7 +706,7 @@
             `;
         }
         
-        // Handle form submission (DEMO VERSION)
+        // Handle form submission
         async function handleSubmit() {
             const firstName = document.getElementById('firstName').value.trim();
             const lastName = document.getElementById('lastName').value.trim();
@@ -728,41 +728,9 @@
             const submitBtn = document.getElementById('submitBtn');
             submitBtn.disabled = true;
             submitBtn.textContent = 'Submitting...';
-            // Handle form submission
-try {
-    const response = await fetch(CONFIG.SCRIPT_URL, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            action: 'submitSignup',
-            boxId: getBoxId(),
-            volunteer: {
-                firstName,
-                lastName,
-                email,
-                phone
-            },
-            items: Array.from(selectedItems)
-        })
-    });
-    
-    const data = await response.json();
-    
-    if (data.success) {
-        showSuccess();
-    } else {
-        showError(data.error || 'Failed to submit sign-up. Please try again.');
-        submitBtn.disabled = false;
-        submitBtn.textContent = 'Sign Up to Help!';
-    }
-} catch (error) {
-    showError('Failed to submit sign-up. Please try again later.');
-    console.error(error);
-    submitBtn.disabled = false;
-    submitBtn.textContent = 'Sign Up to Help!';
-}
+            
+            try {
+                const response = await fetch(CONFIG.SCRIPT_URL, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -795,7 +763,6 @@ try {
                 submitBtn.disabled = false;
                 submitBtn.textContent = 'Sign Up to Help!';
             }
-            */
         }
         
         // Show error message
