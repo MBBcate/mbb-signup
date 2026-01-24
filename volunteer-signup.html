@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Madison Birthday Boost - Volunteer Sign-Up</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #3AAFB9 0%, #8DC63F 100%);
+            min-height: 100vh;
+            padding: 10px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #3AAFB9 0%, #2A9FAA 100%);
+            color: white;
+            padding: 20px 20px 24px;
+            text-align: center;
+        }
+        
+        .logo {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 12px;
+            display: block;
+        }
+        
+        .header h1 {
+            font-size: 24px;
+            margin-bottom: 8px;
+            line-height: 1.3;
+        }
+        
+        .header p {
+            font-size: 15px;
+            opacity: 0.95;
+            line-height: 1.4;
+        }
+        
+        .content {
+            padding: 20px;
+        }
+        
+        .child-info {
+            background: #f8f9fa;
+            border-left: 4px solid #3AAFB9;
+            padding: 18px;
+            margin-bottom: 24px;
+            border-radius: 8px;
+        }
+        
+        .child-info h2 {
+            color: #3AAFB9;
+            margin-bottom: 16px;
+            font-size: 20px;
+            line-height: 1.3;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+        
+        .info-item {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .info-label {
+            font-weight: 600;
+            color: #666;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+        }
+        
+        .info-value {
+            color: #333;
+            font-size: 15px;
+            line-height: 1.4;
+        }
+        
+        .section-title {
+            font-size: 19px;
+            color: #333;
+            margin-bottom: 18px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #3AAFB9;
+        }
+        
+        .supply-item {
+            background: #fff;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 18px;
+            margin-bottom: 14px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            -webkit-user-select: none;
+            user-select: none;
+            /* Larger touch target on mobile */
+            min-height: 60px;
+        }
+        
+        .supply-item:active {
+            transform: scale(0.98);
+        }
+        
+        .supply-item.selected {
+            background: #E8F7F8;
+            border-color: #3AAFB9;
+            border-width: 3px;
+            box-shadow: 0 2px 12px rgba(58, 175, 185, 0.25);
+        }
+        
+        .supply-item input[type="checkbox"] {
+            width: 24px;
+            height: 24px;
+            min-width: 24px;
+            min-height: 24px;
+            margin-right: 14px;
+            cursor: pointer;
+            accent-color: #8DC63F;
+            flex-shrink: 0;
+        }
+        
+        .supply-item label {
+            cursor: pointer;
+            display: flex;
+            align-items: flex-start;
+            font-size: 15px;
+            width: 100%;
+        }
+        
+        .supply-name {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 6px;
+            font-size: 16px;
+            line-height: 1.3;
+        }
+        
+        .supply-description {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        .supply-content {
+            flex: 1;
+        }
+        
+        .volunteer-form {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 24px;
+        }
+        
+        .form-group {
+            margin-bottom: 18px;
+        }
+        
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 14px 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.2s ease;
+            /* Prevents zoom on iOS */
+            font-size: 16px;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: #3AAFB9;
+            box-shadow: 0 0 0 3px rgba(58, 175, 185, 0.1);
+        }
+        
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #8DC63F 0%, #6FB329 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-top: 10px;
+            /* Better touch target */
+            min-height: 54px;
+            touch-action: manipulation;
+            box-shadow: 0 4px 12px rgba(141, 198, 63, 0.3);
+        }
+        
+        .submit-btn:active {
+            transform: scale(0.98);
+        }
+        
+        .submit-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .error-message {
+            background: #fee;
+            border: 1px solid #fcc;
+            color: #c33;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 18px;
+            display: none;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        .success-message {
+            background: #F0F9E8;
+            border: 2px solid #8DC63F;
+            color: #5A8A1F;
+            padding: 24px;
+            border-radius: 12px;
+            text-align: center;
+            font-size: 17px;
+            line-height: 1.5;
+        }
+        
+        .success-message h2 {
+            font-size: 22px;
+            margin-bottom: 12px;
+            color: #5A8A1F;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px 20px;
+            color: #666;
+        }
+        
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3AAFB9;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .note {
+            background: #fff9e6;
+            border-left: 4px solid #ffc107;
+            padding: 16px;
+            margin-top: 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        .note strong {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+        }
+        
+        .drop-off-info {
+            margin-top: 18px;
+            padding: 16px;
+            background: #e8f5e9;
+            border-radius: 8px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        .drop-off-info strong {
+            color: #2e7d32;
+            display: block;
+            margin-bottom: 8px;
+            font-size: 15px;
+        }
+        
+        /* Mobile optimizations */
+        @media (max-width: 640px) {
+            body {
+                padding: 0;
+            }
+            
+            .container {
+                border-radius: 0;
+                min-height: 100vh;
+            }
+            
+            .header {
+                border-radius: 0;
+            }
+            
+            .content {
+                padding: 16px;
+            }
+            
+            .child-info {
+                padding: 16px;
+                margin-bottom: 20px;
+            }
+            
+            .child-info h2 {
+                font-size: 18px;
+            }
+            
+            .info-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 14px;
+            }
+            
+            .section-title {
+                font-size: 18px;
+                margin-bottom: 16px;
+            }
+            
+            .supply-item {
+                padding: 16px;
+                margin-bottom: 12px;
+            }
+            
+            .supply-name {
+                font-size: 15px;
+            }
+            
+            .supply-description {
+                font-size: 13px;
+            }
+            
+            .volunteer-form {
+                padding: 18px;
+                margin-top: 20px;
+            }
+            
+            .form-group {
+                margin-bottom: 16px;
+            }
+            
+            .note {
+                padding: 14px;
+                font-size: 13px;
+            }
+            
+            .drop-off-info {
+                padding: 14px;
+                font-size: 13px;
+            }
+        }
+        
+        /* Very small screens */
+        @media (max-width: 380px) {
+            .header h1 {
+                font-size: 20px;
+            }
+            
+            .header p {
+                font-size: 14px;
+            }
+            
+            .child-info h2 {
+                font-size: 17px;
+            }
+            
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .supply-item input[type="checkbox"] {
+                width: 22px;
+                height: 22px;
+                min-width: 22px;
+                min-height: 22px;
+            }
+        }
+        
+        /* Accessibility improvements */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+        
+        /* Prevent zoom on double-tap for iOS Safari */
+        input, button, select, textarea {
+            touch-action: manipulation;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="logo_512x512.png" alt="Madison Birthday Boost" class="logo">
+            <h1>Madison Birthday Boost</h1>
+            <p>Help make a child's birthday special!</p>
+        </div>
+        
+        <div class="content" id="mainContent">
+            <div class="loading">
+                <div class="spinner"></div>
+                <p>Loading birthday box details...</p>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Configuration - UPDATE THESE WITH YOUR ACTUAL VALUES
+        const CONFIG = {
+            SCRIPT_URL: 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE',
+            SHEET_ID: 'YOUR_SHEET_ID_HERE'
+        };
+        
+        // Supply categories with default descriptions
+        const SUPPLY_CATEGORIES = {
+            tableware: {
+                name: 'Tableware',
+                description: 'Napkins, plates, cups, plastic tablecloth (for 8)'
+            },
+            activity: {
+                name: 'Activity/Game',
+                description: 'Something for the kids to do at the party (plan for 7 kids). Examples: Decorate a crown/mask, bubbles, BINGO, etc'
+            },
+            decorations: {
+                name: 'Decorations',
+                description: 'Crepe paper, tape, curling ribbons. You can also add theme-related decorations if you want.'
+            },
+            party_favors: {
+                name: 'Party Favors',
+                description: '6 favor bags for the kids at the party. Include some fun things for the kids to take home, like stickers, small toys, etc.'
+            },
+            diy_decorations: {
+                name: 'DIY Decorations',
+                description: 'Be creative! Banners, posters, etc are great. Try to include the child\'s name and the theme.'
+            },
+            unwrapped_gift: {
+                name: 'Unwrapped Gift',
+                description: 'For the birthday child, wrapping paper/gift bag, card for the parents to give to the child.'
+            },
+            box_decorations: {
+                name: 'Box Decorations',
+                description: 'Pick up a box from us and decorate it with the child\'s name, age, and theme.'
+            },
+            dessert: {
+                name: '12 Frosted Cupcakes',
+                description: '12 frosted cupcakes, candles'
+            }
+        };
+        
+        // DEMO DATA - Hardcoded for proof of concept
+        let boxData = {
+            child_name: 'Emma',
+            age: 7,
+            gender: 'Girl',
+            theme: 'Unicorns & Rainbows',
+            colors: 'Pink, Purple',
+            language: 'English',
+            allergies: 'No known allergies',
+            gift_ideas: 'Unicorn toys, craft supplies, art sets, books about magical creatures',
+            sizes: '7/8',
+            volunteer_notes: 'Emma loves all things sparkly and magical! She enjoys drawing and crafts. Very sweet and creative girl.',
+            drop_off_location: '(WEST) 3506 Country Grove Dr, Madison, WI 53719 (box outside on front porch)',
+            due_date: 'Wednesday, January 29, 2026',
+            dessert_preference: '12 frosted cupcakes',
+            needed_items: ['tableware', 'activity', 'decorations', 'party_favors', 'diy_decorations', 'unwrapped_gift', 'box_decorations', 'dessert']
+        };
+        
+        let selectedItems = new Set();
+        
+        // Get box ID from URL parameter
+        function getBoxId() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('box') || 'demo-emma-12345';
+        }
+        
+        // Load box data (now using demo data)
+        async function loadBoxData() {
+            // Simulate loading delay for realism
+            setTimeout(() => {
+                renderBoxDetails();
+            }, 500);
+        }
+        
+        // Render the box details and sign-up form
+        function renderBoxDetails() {
+            const content = document.getElementById('mainContent');
+            
+            // Get dessert preference
+            let dessertOption = SUPPLY_CATEGORIES.dessert;
+            if (boxData.dessert_preference === 'Oreos') {
+                dessertOption = {
+                    name: 'Oreos',
+                    description: 'Package of Oreos, candles'
+                };
+            } else if (boxData.dessert_preference === 'Cake Mix') {
+                dessertOption = {
+                    name: 'Cake Mix & Frosting',
+                    description: 'Cake mix, frosting, candles'
+                };
+            }
+            
+            content.innerHTML = `
+                <div class="child-info">
+                    <h2>${boxData.child_name} - ${boxData.theme}</h2>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <span class="info-label">Age Turning</span>
+                            <span class="info-value">${boxData.age}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Gender</span>
+                            <span class="info-value">${boxData.gender}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Language</span>
+                            <span class="info-value">${boxData.language}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Theme Colors</span>
+                            <span class="info-value">${boxData.colors}</span>
+                        </div>
+                    </div>
+                    ${boxData.allergies ? `
+                        <div class="info-item" style="margin-top: 10px;">
+                            <span class="info-label">Allergies</span>
+                            <span class="info-value">${boxData.allergies}</span>
+                        </div>
+                    ` : ''}
+                    ${boxData.gift_ideas ? `
+                        <div class="info-item" style="margin-top: 10px;">
+                            <span class="info-label">Gift Ideas</span>
+                            <span class="info-value">${boxData.gift_ideas}</span>
+                        </div>
+                    ` : ''}
+                    ${boxData.sizes ? `
+                        <div class="info-item" style="margin-top: 10px;">
+                            <span class="info-label">Sizes</span>
+                            <span class="info-value">${boxData.sizes}</span>
+                        </div>
+                    ` : ''}
+                    ${boxData.volunteer_notes ? `
+                        <div class="info-item" style="margin-top: 10px;">
+                            <span class="info-label">Notes for Volunteers</span>
+                            <span class="info-value">${boxData.volunteer_notes}</span>
+                        </div>
+                    ` : ''}
+                    
+                    <div class="drop-off-info">
+                        <strong>📍 Preferred Drop-Off Location:</strong>
+                        ${boxData.drop_off_location}<br>
+                        <strong>📅 Supplies Due:</strong>
+                        ${boxData.due_date}
+                    </div>
+                </div>
+                
+                <h3 class="section-title">Select Items to Provide</h3>
+                <div class="error-message" id="errorMessage"></div>
+                
+                <div id="supplyList">
+                    ${renderSupplyItems(boxData.needed_items, dessertOption)}
+                </div>
+                
+                <div class="volunteer-form" id="volunteerForm" style="display: none;">
+                    <h3 class="section-title">Your Information</h3>
+                    <div class="form-group">
+                        <label for="firstName">First Name *</label>
+                        <input type="text" id="firstName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName">Last Name *</label>
+                        <input type="text" id="lastName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email *</label>
+                        <input type="email" id="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone</label>
+                        <input type="tel" id="phone">
+                    </div>
+                    <button class="submit-btn" id="submitBtn">Sign Up to Help!</button>
+                </div>
+                
+                <div class="note">
+                    <strong>Thank you for volunteering!</strong>
+                    You'll receive a reminder email 2 days before the supplies are due.
+                    For inspiration, check out our <a href="https://www.facebook.com/MadisonBirthdayBoost" target="_blank" style="color: #3AAFB9; font-weight: 600;">Facebook page</a> for pictures of past birthday celebrations!
+                </div>
+            `;
+            
+            // Add event listeners
+            document.querySelectorAll('.supply-item').forEach(item => {
+                item.addEventListener('click', function(e) {
+                    if (e.target.type !== 'checkbox') {
+                        const checkbox = this.querySelector('input[type="checkbox"]');
+                        checkbox.checked = !checkbox.checked;
+                        checkbox.dispatchEvent(new Event('change'));
+                    }
+                });
+            });
+            
+            document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    const item = this.closest('.supply-item');
+                    if (this.checked) {
+                        item.classList.add('selected');
+                        selectedItems.add(this.value);
+                    } else {
+                        item.classList.remove('selected');
+                        selectedItems.delete(this.value);
+                    }
+                    
+                    // Show/hide volunteer form based on selections
+                    const form = document.getElementById('volunteerForm');
+                    form.style.display = selectedItems.size > 0 ? 'block' : 'none';
+                });
+            });
+            
+            document.getElementById('submitBtn').addEventListener('click', handleSubmit);
+        }
+        
+        // Render supply items
+        function renderSupplyItems(neededItems, dessertOption) {
+            const items = [];
+            
+            if (neededItems.includes('tableware')) {
+                items.push(renderSupplyItem('tableware', SUPPLY_CATEGORIES.tableware));
+            }
+            if (neededItems.includes('activity')) {
+                items.push(renderSupplyItem('activity', SUPPLY_CATEGORIES.activity));
+            }
+            if (neededItems.includes('decorations')) {
+                items.push(renderSupplyItem('decorations', SUPPLY_CATEGORIES.decorations));
+            }
+            if (neededItems.includes('party_favors')) {
+                items.push(renderSupplyItem('party_favors', SUPPLY_CATEGORIES.party_favors));
+            }
+            if (neededItems.includes('diy_decorations')) {
+                items.push(renderSupplyItem('diy_decorations', SUPPLY_CATEGORIES.diy_decorations));
+            }
+            if (neededItems.includes('unwrapped_gift')) {
+                items.push(renderSupplyItem('unwrapped_gift', SUPPLY_CATEGORIES.unwrapped_gift));
+            }
+            if (neededItems.includes('box_decorations')) {
+                items.push(renderSupplyItem('box_decorations', SUPPLY_CATEGORIES.box_decorations));
+            }
+            if (neededItems.includes('dessert')) {
+                items.push(renderSupplyItem('dessert', dessertOption));
+            }
+            
+            return items.join('');
+        }
+        
+        // Render individual supply item
+        function renderSupplyItem(id, category) {
+            return `
+                <div class="supply-item">
+                    <label>
+                        <input type="checkbox" value="${id}">
+                        <div class="supply-content">
+                            <div class="supply-name">${category.name}</div>
+                            <div class="supply-description">${category.description}</div>
+                        </div>
+                    </label>
+                </div>
+            `;
+        }
+        
+        // Handle form submission (DEMO VERSION)
+        async function handleSubmit() {
+            const firstName = document.getElementById('firstName').value.trim();
+            const lastName = document.getElementById('lastName').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            
+            // Validation
+            if (!firstName || !lastName || !email) {
+                showError('Please fill in all required fields (First Name, Last Name, and Email)');
+                return;
+            }
+            
+            if (selectedItems.size === 0) {
+                showError('Please select at least one item to provide');
+                return;
+            }
+            
+            // Disable submit button
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Submitting...';
+            
+            // DEMO: Simulate API call with delay
+            setTimeout(() => {
+                console.log('DEMO SUBMISSION:', {
+                    volunteer: { firstName, lastName, email, phone },
+                    items: Array.from(selectedItems),
+                    boxId: getBoxId()
+                });
+                showSuccess();
+            }, 1000);
+            
+            /* PRODUCTION VERSION - Uncomment when ready to go live:
+            try {
+                const response = await fetch(CONFIG.SCRIPT_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        action: 'submitSignup',
+                        boxId: getBoxId(),
+                        volunteer: {
+                            firstName,
+                            lastName,
+                            email,
+                            phone
+                        },
+                        items: Array.from(selectedItems)
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showSuccess();
+                } else {
+                    showError(data.error || 'Failed to submit sign-up. Please try again.');
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Sign Up to Help!';
+                }
+            } catch (error) {
+                showError('Failed to submit sign-up. Please try again later.');
+                console.error(error);
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Sign Up to Help!';
+            }
+            */
+        }
+        
+        // Show error message
+        function showError(message) {
+            const content = document.getElementById('mainContent');
+            if (content.querySelector('.loading')) {
+                content.innerHTML = `
+                    <div class="error-message" style="display: block;">
+                        ${message}
+                    </div>
+                `;
+            } else {
+                const errorDiv = document.getElementById('errorMessage');
+                errorDiv.textContent = message;
+                errorDiv.style.display = 'block';
+                setTimeout(() => {
+                    errorDiv.style.display = 'none';
+                }, 5000);
+            }
+        }
+        
+        // Show success message
+        function showSuccess() {
+            const content = document.getElementById('mainContent');
+            content.innerHTML = `
+                <div class="success-message">
+                    <h2>🎉 Thank you for signing up!</h2>
+                    <p style="margin-top: 15px;">
+                        You'll receive a reminder email 2 days before the supplies are due.
+                    </p>
+                    <p style="margin-top: 10px;">
+                        We truly appreciate your support in making ${boxData.child_name}'s birthday special!
+                    </p>
+                    <p style="margin-top: 15px;">
+                        For inspiration, check out our <a href="https://www.facebook.com/MadisonBirthdayBoost" target="_blank" style="color: #3AAFB9; font-weight: 600; text-decoration: underline;">Facebook page</a> for pictures of past celebrations!
+                    </p>
+                </div>
+            `;
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', loadBoxData);
+    </script>
+</body>
+</html>
