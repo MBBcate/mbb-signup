@@ -728,20 +728,41 @@
             const submitBtn = document.getElementById('submitBtn');
             submitBtn.disabled = true;
             submitBtn.textContent = 'Submitting...';
-            
-            // DEMO: Simulate API call with delay
-            setTimeout(() => {
-                console.log('DEMO SUBMISSION:', {
-                    volunteer: { firstName, lastName, email, phone },
-                    items: Array.from(selectedItems),
-                    boxId: getBoxId()
-                });
-                showSuccess();
-            }, 1000);
-            
-            /* PRODUCTION VERSION - Uncomment when ready to go live:
-            try {
-                const response = await fetch(CONFIG.SCRIPT_URL, {
+            // Handle form submission
+try {
+    const response = await fetch(CONFIG.SCRIPT_URL, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            action: 'submitSignup',
+            boxId: getBoxId(),
+            volunteer: {
+                firstName,
+                lastName,
+                email,
+                phone
+            },
+            items: Array.from(selectedItems)
+        })
+    });
+    
+    const data = await response.json();
+    
+    if (data.success) {
+        showSuccess();
+    } else {
+        showError(data.error || 'Failed to submit sign-up. Please try again.');
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Sign Up to Help!';
+    }
+} catch (error) {
+    showError('Failed to submit sign-up. Please try again later.');
+    console.error(error);
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Sign Up to Help!';
+}
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
