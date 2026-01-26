@@ -587,8 +587,16 @@
                     
                     <div class="drop-off-info">
                         <strong>📍 Preferred Drop-Off Location:</strong>
-                        ${boxData.drop_off_location}<br>
-                        <strong>📅 Supplies Due:</strong>
+                        ${boxData.drop_off_location}<br><br>
+                        <strong>Other drop-off locations:</strong><br>
+                        ${boxData.drop_off_location.includes('Country Grove') ? 
+                            '- (EAST) 6229 Dominion Dr, Madison, WI 53718 (box outside on front porch)' : 
+                            '- (WEST) 3506 Country Grove Dr, Madison, WI 53719 (box outside on front porch)'}<br>
+                        <br>
+                        <small style="color: #666;">You can drop off at any location or ship supplies directly to these addresses.</small>
+                    </div>
+                    <div style="margin-top: 15px; padding: 12px; background: #fff9e6; border-radius: 6px;">
+                        <strong style="color: #f57c00;">📅 Supplies Due:</strong>
                         ${boxData.due_date}
                     </div>
                 </div>
