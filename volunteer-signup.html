@@ -366,7 +366,7 @@
     
     <script>
         const CONFIG = {
-            SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbynwXZResWM5mtOZ9u7m_gVyN_KW8L1FMqb_uIagVxf0BYR9ILFY6YAQY8fDoY3a0vr-A/exec',
+            SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbyexSmAChRJJm2No7HLEXQAwbT5lcH4lKL04AqVc5J-Q8ZNBsre0ivBaCUV5jtB_q7JNA/exec',
             SHEET_ID: '14oBUZp-fe88ENXa-jXRCCLRQhtj3omjhWfFk_wXyqCE'
         };
         
@@ -585,20 +585,8 @@
             submitBtn.disabled = true;
             submitBtn.textContent = 'Submitting...';
             
-            try {
-                const response = await fetch(CONFIG.SCRIPT_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        action: 'submitSignup',
-                        boxId: getBoxId(),
-                        volunteer: { firstName, lastName, email, phone },
-                        items: Array.from(selectedItems)
-                    })
-                });
-                
-                const data = await response.json();
-                
+            // Use JSONP to avoid CORS
+            window.signupCallback = function(data) {
                 if (data.success) {
                     showSuccess();
                 } else {
@@ -606,12 +594,22 @@
                     submitBtn.disabled = false;
                     submitBtn.textContent = 'Sign Up to Help!';
                 }
-            } catch (error) {
-                showError('Failed to submit sign-up. Please try again later.');
-                console.error(error);
-                submitBtn.disabled = false;
-                submitBtn.textContent = 'Sign Up to Help!';
-            }
+            };
+            
+            const data = {
+                action: 'submitSignup',
+                boxId: getBoxId(),
+                firstName: firstName,
+                lastName: lastName,
+                email: email,
+                phone: phone,
+                items: Array.from(selectedItems).join(',')
+            };
+            
+            const params = Object.keys(data).map(k => encodeURIComponent(k) + '=' + encodeURIComponent(data[k])).join('&');
+            const script = document.createElement('script');
+            script.src = CONFIG.SCRIPT_URL + '?callback=signupCallback&' + params;
+            document.body.appendChild(script);
         }
         
         function showError(message) {
