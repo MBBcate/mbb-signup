@@ -118,7 +118,6 @@
             cursor: pointer;
             -webkit-user-select: none;
             user-select: none;
-            /* Larger touch target on mobile */
             min-height: 60px;
         }
         
@@ -196,8 +195,6 @@
             border-radius: 8px;
             font-size: 16px;
             transition: border-color 0.2s ease;
-            /* Prevents zoom on iOS */
-            font-size: 16px;
         }
         
         .form-group input:focus {
@@ -218,7 +215,6 @@
             cursor: pointer;
             transition: all 0.2s ease;
             margin-top: 10px;
-            /* Better touch target */
             min-height: 54px;
             touch-action: manipulation;
             box-shadow: 0 4px 12px rgba(141, 198, 63, 0.3);
@@ -317,112 +313,36 @@
             font-size: 15px;
         }
         
-        /* Mobile optimizations */
         @media (max-width: 640px) {
-            body {
-                padding: 0;
-            }
-            
-            .container {
-                border-radius: 0;
-                min-height: 100vh;
-            }
-            
-            .header {
-                border-radius: 0;
-            }
-            
-            .content {
-                padding: 16px;
-            }
-            
-            .child-info {
-                padding: 16px;
-                margin-bottom: 20px;
-            }
-            
-            .child-info h2 {
-                font-size: 18px;
-            }
-            
-            .info-grid {
-                grid-template-columns: 1fr 1fr;
-                gap: 14px;
-            }
-            
-            .section-title {
-                font-size: 18px;
-                margin-bottom: 16px;
-            }
-            
-            .supply-item {
-                padding: 16px;
-                margin-bottom: 12px;
-            }
-            
-            .supply-name {
-                font-size: 15px;
-            }
-            
-            .supply-description {
-                font-size: 13px;
-            }
-            
-            .volunteer-form {
-                padding: 18px;
-                margin-top: 20px;
-            }
-            
-            .form-group {
-                margin-bottom: 16px;
-            }
-            
-            .note {
-                padding: 14px;
-                font-size: 13px;
-            }
-            
-            .drop-off-info {
-                padding: 14px;
-                font-size: 13px;
-            }
+            body { padding: 0; }
+            .container { border-radius: 0; min-height: 100vh; }
+            .header { border-radius: 0; }
+            .content { padding: 16px; }
+            .child-info { padding: 16px; margin-bottom: 20px; }
+            .child-info h2 { font-size: 18px; }
+            .info-grid { grid-template-columns: 1fr 1fr; gap: 14px; }
+            .section-title { font-size: 18px; margin-bottom: 16px; }
+            .supply-item { padding: 16px; margin-bottom: 12px; }
+            .supply-name { font-size: 15px; }
+            .supply-description { font-size: 13px; }
+            .volunteer-form { padding: 18px; margin-top: 20px; }
+            .form-group { margin-bottom: 16px; }
+            .note { padding: 14px; font-size: 13px; }
+            .drop-off-info { padding: 14px; font-size: 13px; }
         }
         
-        /* Very small screens */
         @media (max-width: 380px) {
-            .header h1 {
-                font-size: 20px;
-            }
-            
-            .header p {
-                font-size: 14px;
-            }
-            
-            .child-info h2 {
-                font-size: 17px;
-            }
-            
-            .info-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .supply-item input[type="checkbox"] {
-                width: 22px;
-                height: 22px;
-                min-width: 22px;
-                min-height: 22px;
-            }
+            .header h1 { font-size: 20px; }
+            .header p { font-size: 14px; }
+            .child-info h2 { font-size: 17px; }
+            .info-grid { grid-template-columns: 1fr; }
+            .supply-item input[type="checkbox"] { width: 22px; height: 22px; min-width: 22px; min-height: 22px; }
         }
         
-        /* Accessibility improvements */
         @media (prefers-reduced-motion: reduce) {
-            * {
-                animation-duration: 0.01ms !important;
-                transition-duration: 0.01ms !important;
-            }
+            * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
         }
         
-        /* Prevent zoom on double-tap for iOS Safari */
         input, button, select, textarea {
             touch-action: manipulation;
         }
@@ -445,109 +365,72 @@
     </div>
     
     <script>
-        // Configuration - UPDATE THESE WITH YOUR ACTUAL VALUES
         const CONFIG = {
-            SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbyG-aEUmm9q0upO05gkagN7p1pN4nUb8wxrzH1TM--JVEANOzpnzguFTjf8YKmzlOosCQ/exec',
+            SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbxY_hb36CsbF4zQdyVHcVRUyJzlitIbWX3_NJJvMQtoIXr-EPq_w1U9hrsrpWpoGKk7uA/exec',
             SHEET_ID: '14oBUZp-fe88ENXa-jXRCCLRQhtj3omjhWfFk_wXyqCE'
         };
         
-        // Supply categories with default descriptions
         const SUPPLY_CATEGORIES = {
-            tableware: {
-                name: 'Tableware',
-                description: 'Napkins, plates, cups, plastic tablecloth (for 8)'
-            },
-            activity: {
-                name: 'Activity/Game',
-                description: 'Something for the kids to do at the party (plan for 7 kids). Examples: Decorate a crown/mask, bubbles, BINGO, etc'
-            },
-            decorations: {
-                name: 'Decorations',
-                description: 'Crepe paper, tape, curling ribbons. You can also add theme-related decorations if you want.'
-            },
-            party_favors: {
-                name: 'Party Favors',
-                description: '6 favor bags for the kids at the party. Include some fun things for the kids to take home, like stickers, small toys, etc.'
-            },
-            diy_decorations: {
-                name: 'DIY Decorations',
-                description: 'Be creative! Banners, posters, etc are great. Try to include the child\'s name and the theme.'
-            },
-            unwrapped_gift: {
-                name: 'Unwrapped Gift',
-                description: 'For the birthday child, wrapping paper/gift bag, card for the parents to give to the child.'
-            },
-            box_decorations: {
-                name: 'Box Decorations',
-                description: 'Pick up a box from us and decorate it with the child\'s name, age, and theme.'
-            },
-            dessert: {
-                name: '12 Frosted Cupcakes',
-                description: '12 frosted cupcakes, candles'
-            }
+            tableware: { name: 'Tableware', description: 'Napkins, plates, cups, plastic tablecloth (for 8)' },
+            activity: { name: 'Activity/Game', description: 'Something for the kids to do at the party (plan for 7 kids). Examples: Decorate a crown/mask, bubbles, BINGO, etc' },
+            decorations: { name: 'Decorations', description: 'Crepe paper, tape, curling ribbons. You can also add theme-related decorations if you want.' },
+            party_favors: { name: 'Party Favors', description: '6 favor bags for the kids at the party. Include some fun things for the kids to take home, like stickers, small toys, etc.' },
+            diy_decorations: { name: 'DIY Decorations', description: 'Be creative! Banners, posters, etc are great. Try to include the child\'s name and the theme.' },
+            unwrapped_gift: { name: 'Unwrapped Gift', description: 'For the birthday child, wrapping paper/gift bag, card for the parents to give to the child.' },
+            box_decorations: { name: 'Box Decorations', description: 'Pick up a box from us and decorate it with the child\'s name, age, and theme.' },
+            dessert: { name: '12 Frosted Cupcakes', description: '12 frosted cupcakes, candles' }
         };
         
         let boxData = null;
         let selectedItems = new Set();
         
-        // Format date nicely
         function formatDate(dateString) {
-            const date = new Date(dateString);
-            return date.toLocaleDateString('en-US', { 
-                weekday: 'long', 
-                year: 'numeric', 
-                month: 'long', 
-                day: 'numeric' 
-            });
+            return dateString;
         }
         
-        // Get box ID from URL parameter
         function getBoxId() {
             const urlParams = new URLSearchParams(window.location.search);
             return urlParams.get('box');
         }
         
-        // Load box data from server
-        async function loadBoxData() {
-            const boxId = getBoxId();
-            if (!boxId) {
+        function loadBoxData() {
+            const urlParams = new URLSearchParams(window.location.search);
+            
+            if (!urlParams.get('box')) {
                 showError('No box ID provided in URL');
                 return;
             }
             
-            try {
-                const response = await fetch(`${CONFIG.SCRIPT_URL}?action=getBox&boxId=${boxId}`);
-                const data = await response.json();
-                
-                if (data.error) {
-                    showError(data.error);
-                    return;
-                }
-                
-                boxData = data;
-                renderBoxDetails();
-            } catch (error) {
-                showError('Failed to load box details. Please try again later.');
-                console.error(error);
-            }
+            boxData = {
+                box_id: urlParams.get('box'),
+                child_name: urlParams.get('name') || 'Child',
+                age: urlParams.get('age') || '',
+                gender: urlParams.get('gender') || '',
+                theme: urlParams.get('theme') || '',
+                colors: urlParams.get('colors') || '',
+                language: urlParams.get('language') || 'English',
+                allergies: urlParams.get('allergies') || '',
+                gift_ideas: urlParams.get('gifts') || '',
+                sizes: urlParams.get('sizes') || '',
+                volunteer_notes: urlParams.get('notes') || '',
+                drop_off_location: urlParams.get('location') || '',
+                scheduled_pickup: urlParams.get('pickup') || '',
+                due_date: urlParams.get('due') || '',
+                dessert_preference: urlParams.get('dessert') || '12 frosted cupcakes',
+                needed_items: urlParams.get('items') ? urlParams.get('items').split(',') : []
+            };
+            
+            renderBoxDetails();
         }
         
-        // Render the box details and sign-up form
         function renderBoxDetails() {
             const content = document.getElementById('mainContent');
             
-            // Get dessert preference
             let dessertOption = SUPPLY_CATEGORIES.dessert;
             if (boxData.dessert_preference === 'Oreos') {
-                dessertOption = {
-                    name: 'Oreos',
-                    description: 'Package of Oreos, candles'
-                };
+                dessertOption = { name: 'Oreos', description: 'Package of Oreos, candles' };
             } else if (boxData.dessert_preference === 'Cake Mix') {
-                dessertOption = {
-                    name: 'Cake Mix & Frosting',
-                    description: 'Cake mix, frosting, candles'
-                };
+                dessertOption = { name: 'Cake Mix & Frosting', description: 'Cake mix, frosting, candles' };
             }
             
             content.innerHTML = `
@@ -571,39 +454,16 @@
                             <span class="info-value">${boxData.colors}</span>
                         </div>
                     </div>
-                    ${boxData.allergies ? `
-                        <div class="info-item" style="margin-top: 10px;">
-                            <span class="info-label">Allergies</span>
-                            <span class="info-value">${boxData.allergies}</span>
-                        </div>
-                    ` : ''}
-                    ${boxData.gift_ideas ? `
-                        <div class="info-item" style="margin-top: 10px;">
-                            <span class="info-label">Gift Ideas</span>
-                            <span class="info-value">${boxData.gift_ideas}</span>
-                        </div>
-                    ` : ''}
-                    ${boxData.sizes ? `
-                        <div class="info-item" style="margin-top: 10px;">
-                            <span class="info-label">Sizes</span>
-                            <span class="info-value">${boxData.sizes}</span>
-                        </div>
-                    ` : ''}
-                    ${boxData.volunteer_notes ? `
-                        <div class="info-item" style="margin-top: 10px;">
-                            <span class="info-label">Notes for Volunteers</span>
-                            <span class="info-value">${boxData.volunteer_notes}</span>
-                        </div>
-                    ` : ''}
+                    ${boxData.allergies ? `<div class="info-item" style="margin-top: 10px;"><span class="info-label">Allergies</span><span class="info-value">${boxData.allergies}</span></div>` : ''}
+                    ${boxData.gift_ideas ? `<div class="info-item" style="margin-top: 10px;"><span class="info-label">Gift Ideas</span><span class="info-value">${boxData.gift_ideas}</span></div>` : ''}
+                    ${boxData.sizes ? `<div class="info-item" style="margin-top: 10px;"><span class="info-label">Sizes</span><span class="info-value">${boxData.sizes}</span></div>` : ''}
+                    ${boxData.volunteer_notes ? `<div class="info-item" style="margin-top: 10px;"><span class="info-label">Notes for Volunteers</span><span class="info-value">${boxData.volunteer_notes}</span></div>` : ''}
                     
                     <div class="drop-off-info">
                         <strong>📍 Preferred Drop-Off Location:</strong>
                         ${boxData.drop_off_location}<br><br>
                         <strong>Other drop-off locations:</strong><br>
-                        ${boxData.drop_off_location.includes('Country Grove') ? 
-                            '- (EAST) 6229 Dominion Dr, Madison, WI 53718 (box outside on front porch)' : 
-                            '- (WEST) 3506 Country Grove Dr, Madison, WI 53719 (box outside on front porch)'}<br>
-                        <br>
+                        ${boxData.drop_off_location.includes('Country Grove') ? '- (EAST) 6229 Dominion Dr, Madison, WI 53718 (box outside on front porch)' : '- (WEST) 3506 Country Grove Dr, Madison, WI 53719 (box outside on front porch)'}<br><br>
                         <small style="color: #666;">Please drop off cupcakes at the preferred drop off location. All other supplies can be dropped off at any location or you can ship supplies directly to these addresses.</small>
                     </div>
                     <div style="margin-top: 15px; padding: 12px; background: #fff9e6; border-radius: 6px;">
@@ -647,7 +507,6 @@
                 </div>
             `;
             
-            // Add event listeners
             document.querySelectorAll('.supply-item').forEach(item => {
                 item.addEventListener('click', function(e) {
                     if (e.target.type !== 'checkbox') {
@@ -669,7 +528,6 @@
                         selectedItems.delete(this.value);
                     }
                     
-                    // Show/hide volunteer form based on selections
                     const form = document.getElementById('volunteerForm');
                     form.style.display = selectedItems.size > 0 ? 'block' : 'none';
                 });
@@ -678,39 +536,21 @@
             document.getElementById('submitBtn').addEventListener('click', handleSubmit);
         }
         
-        // Render supply items
         function renderSupplyItems(neededItems, dessertOption) {
             const items = [];
             
-            if (neededItems.includes('tableware')) {
-                items.push(renderSupplyItem('tableware', SUPPLY_CATEGORIES.tableware));
-            }
-            if (neededItems.includes('activity')) {
-                items.push(renderSupplyItem('activity', SUPPLY_CATEGORIES.activity));
-            }
-            if (neededItems.includes('decorations')) {
-                items.push(renderSupplyItem('decorations', SUPPLY_CATEGORIES.decorations));
-            }
-            if (neededItems.includes('party_favors')) {
-                items.push(renderSupplyItem('party_favors', SUPPLY_CATEGORIES.party_favors));
-            }
-            if (neededItems.includes('diy_decorations')) {
-                items.push(renderSupplyItem('diy_decorations', SUPPLY_CATEGORIES.diy_decorations));
-            }
-            if (neededItems.includes('unwrapped_gift')) {
-                items.push(renderSupplyItem('unwrapped_gift', SUPPLY_CATEGORIES.unwrapped_gift));
-            }
-            if (neededItems.includes('box_decorations')) {
-                items.push(renderSupplyItem('box_decorations', SUPPLY_CATEGORIES.box_decorations));
-            }
-            if (neededItems.includes('dessert')) {
-                items.push(renderSupplyItem('dessert', dessertOption));
-            }
+            if (neededItems.includes('tableware')) items.push(renderSupplyItem('tableware', SUPPLY_CATEGORIES.tableware));
+            if (neededItems.includes('activity')) items.push(renderSupplyItem('activity', SUPPLY_CATEGORIES.activity));
+            if (neededItems.includes('decorations')) items.push(renderSupplyItem('decorations', SUPPLY_CATEGORIES.decorations));
+            if (neededItems.includes('party_favors')) items.push(renderSupplyItem('party_favors', SUPPLY_CATEGORIES.party_favors));
+            if (neededItems.includes('diy_decorations')) items.push(renderSupplyItem('diy_decorations', SUPPLY_CATEGORIES.diy_decorations));
+            if (neededItems.includes('unwrapped_gift')) items.push(renderSupplyItem('unwrapped_gift', SUPPLY_CATEGORIES.unwrapped_gift));
+            if (neededItems.includes('box_decorations')) items.push(renderSupplyItem('box_decorations', SUPPLY_CATEGORIES.box_decorations));
+            if (neededItems.includes('dessert')) items.push(renderSupplyItem('dessert', dessertOption));
             
             return items.join('');
         }
         
-        // Render individual supply item
         function renderSupplyItem(id, category) {
             return `
                 <div class="supply-item">
@@ -725,14 +565,12 @@
             `;
         }
         
-        // Handle form submission
         async function handleSubmit() {
             const firstName = document.getElementById('firstName').value.trim();
             const lastName = document.getElementById('lastName').value.trim();
             const email = document.getElementById('email').value.trim();
             const phone = document.getElementById('phone').value.trim();
             
-            // Validation
             if (!firstName || !lastName || !email) {
                 showError('Please fill in all required fields (First Name, Last Name, and Email)');
                 return;
@@ -743,7 +581,6 @@
                 return;
             }
             
-            // Disable submit button
             const submitBtn = document.getElementById('submitBtn');
             submitBtn.disabled = true;
             submitBtn.textContent = 'Submitting...';
@@ -751,18 +588,11 @@
             try {
                 const response = await fetch(CONFIG.SCRIPT_URL, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         action: 'submitSignup',
                         boxId: getBoxId(),
-                        volunteer: {
-                            firstName,
-                            lastName,
-                            email,
-                            phone
-                        },
+                        volunteer: { firstName, lastName, email, phone },
                         items: Array.from(selectedItems)
                     })
                 });
@@ -784,45 +614,30 @@
             }
         }
         
-        // Show error message
         function showError(message) {
             const content = document.getElementById('mainContent');
             if (content.querySelector('.loading')) {
-                content.innerHTML = `
-                    <div class="error-message" style="display: block;">
-                        ${message}
-                    </div>
-                `;
+                content.innerHTML = `<div class="error-message" style="display: block;">${message}</div>`;
             } else {
                 const errorDiv = document.getElementById('errorMessage');
                 errorDiv.textContent = message;
                 errorDiv.style.display = 'block';
-                setTimeout(() => {
-                    errorDiv.style.display = 'none';
-                }, 5000);
+                setTimeout(() => { errorDiv.style.display = 'none'; }, 5000);
             }
         }
         
-        // Show success message
         function showSuccess() {
             const content = document.getElementById('mainContent');
             content.innerHTML = `
                 <div class="success-message">
                     <h2>🎉 Thank you for signing up!</h2>
-                    <p style="margin-top: 15px;">
-                        You'll receive a reminder email 2 days before the supplies are due.
-                    </p>
-                    <p style="margin-top: 10px;">
-                        We truly appreciate your support in making ${boxData.child_name}'s birthday special!
-                    </p>
-                    <p style="margin-top: 15px;">
-                        For inspiration, check out our <a href="https://www.facebook.com/MadisonBirthdayBoost" target="_blank" style="color: #3AAFB9; font-weight: 600; text-decoration: underline;">Facebook page</a> for pictures of past celebrations!
-                    </p>
+                    <p style="margin-top: 15px;">You'll receive a reminder email 2 days before the supplies are due.</p>
+                    <p style="margin-top: 10px;">We truly appreciate your support in making ${boxData.child_name}'s birthday special!</p>
+                    <p style="margin-top: 15px;">For inspiration, check out our <a href="https://www.facebook.com/MadisonBirthdayBoost" target="_blank" style="color: #3AAFB9; font-weight: 600; text-decoration: underline;">Facebook page</a> for pictures of past celebrations!</p>
                 </div>
             `;
         }
         
-        // Initialize
         document.addEventListener('DOMContentLoaded', loadBoxData);
     </script>
 </body>
