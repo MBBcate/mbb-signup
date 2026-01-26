@@ -490,6 +490,17 @@
         let boxData = null;
         let selectedItems = new Set();
         
+        // Format date nicely
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+        }
+        
         // Get box ID from URL parameter
         function getBoxId() {
             const urlParams = new URLSearchParams(window.location.search);
@@ -597,7 +608,7 @@
                     </div>
                     <div style="margin-top: 15px; padding: 12px; background: #fff9e6; border-radius: 6px;">
                         <strong style="color: #f57c00;">📅 Supplies Due:</strong>
-                        ${boxData.due_date}
+                        ${formatDate(boxData.due_date)}
                     </div>
                 </div>
                 
