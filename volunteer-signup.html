@@ -635,17 +635,19 @@
         }
         
         function showSuccess() {
-            const content = document.getElementById('mainContent');
-            const childName = boxData.child_name || 'this child';
-            content.innerHTML = `
-                <div class="success-message">
-                    <h2>🎉 Thank you for signing up!</h2>
-                    <p style="margin-top: 15px;">You'll receive a reminder email 2 days before the supplies are due.</p>
-                    <p style="margin-top: 10px;">We truly appreciate your support in making ${childName}'s birthday special!</p>
-                    <p style="margin-top: 15px;">For inspiration, check out our <a href="https://www.facebook.com/MadisonBirthdayBoost" target="_blank" style="color: #3AAFB9; font-weight: 600; text-decoration: underline;">Facebook page</a> for pictures of past celebrations!</p>
-                </div>
-            `;
-        }
+    const content = document.getElementById('mainContent');
+    const childName = boxData.child_name || 'this child';
+    const currentUrl = window.location.href;
+    content.innerHTML = `
+        <div class="success-message">
+            <h2>🎉 Thank you for signing up!</h2>
+            <p style="margin-top: 15px;">You'll receive a reminder email 2 days before the supplies are due.</p>
+            <p style="margin-top: 10px;">We truly appreciate your support in making ${childName}'s birthday special!</p>
+            <p style="margin-top: 15px;"><a href="${currentUrl}" style="color: #3AAFB9; font-weight: 600; text-decoration: underline;">Want to sign up for more items?</a></p>
+            <p style="margin-top: 15px;">For inspiration, check out our <a href="https://www.facebook.com/MadisonBirthdayBoost" target="_blank" style="color: #3AAFB9; font-weight: 600; text-decoration: underline;">Facebook page</a> for pictures of past celebrations!</p>
+        </div>
+    `;
+}
         
         document.addEventListener('DOMContentLoaded', loadBoxData);
     </script>
