@@ -366,8 +366,7 @@
     
     <script>
         const CONFIG = {
-            SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbwTFRjWrLREjVZFR-YDSoGt-aNnHRag4d_UqvB0VD4TGgDcYIE82n7kJ8gh6RL2fClDGg/exec',
-            SHEET_ID: '14oBUZp-fe88ENXa-jXRCCLRQhtj3omjhWfFk_wXyqCE'
+            SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbxuDzc46ewcVkRziUiH29tV_Cn1iI9OWzRiMBG7Vi5VTxHXLYWrg5fV8aLFTWGRQPOAUQ/exec'
         };
         
         const SUPPLY_CATEGORIES = {
@@ -384,47 +383,45 @@
         let boxData = null;
         let selectedItems = new Set();
         
-        function formatDate(dateString) {
-            return dateString;
-        }
-        
         function getBoxId() {
             const urlParams = new URLSearchParams(window.location.search);
             return urlParams.get('box');
         }
         
-        function loadBoxData() {
-            const urlParams = new URLSearchParams(window.location.search);
+        async function loadBoxData() {
+            const boxId = getBoxId();
             
-            if (!urlParams.get('box')) {
+            if (!boxId) {
                 showError('No box ID provided in URL');
                 return;
             }
             
-            boxData = {
-                box_id: urlParams.get('box'),
-                child_name: urlParams.get('name') || 'Child',
-                age: urlParams.get('age') || '',
-                gender: urlParams.get('gender') || '',
-                theme: urlParams.get('theme') || '',
-                colors: urlParams.get('colors') || '',
-                language: urlParams.get('language') || 'English',
-                allergies: urlParams.get('allergies') || '',
-                gift_ideas: urlParams.get('gifts') || '',
-                sizes: urlParams.get('sizes') || '',
-                volunteer_notes: urlParams.get('notes') || '',
-                drop_off_location: urlParams.get('location') || '',
-                scheduled_pickup: urlParams.get('pickup') || '',
-                due_date: urlParams.get('due') || '',
-                dessert_preference: urlParams.get('dessert') || '12 frosted cupcakes',
-                needed_items: urlParams.get('items') ? urlParams.get('items').split(',') : []
+            // Fetch box data from web app using JSONP
+            window.boxDataCallback = function(data) {
+                if (data.error) {
+                    showError('Failed to load box details: ' + data.error);
+                    return;
+                }
+                
+                boxData = data;
+                renderBoxDetails();
             };
             
-            renderBoxDetails();
+            const script = document.createElement('script');
+            script.src = CONFIG.SCRIPT_URL + '?action=getBox&boxId=' + encodeURIComponent(boxId) + '&callback=boxDataCallback';
+            document.body.appendChild(script);
         }
         
         function renderBoxDetails() {
             const content = document.getElementById('mainContent');
+            
+            // Parse needed items if it's a string
+            let neededItems = [];
+            if (typeof boxData.needed_items === 'string') {
+                neededItems = boxData.needed_items.split(',').map(item => item.trim());
+            } else if (Array.isArray(boxData.needed_items)) {
+                neededItems = boxData.needed_items;
+            }
             
             let dessertOption = SUPPLY_CATEGORIES.dessert;
             if (boxData.dessert_preference === 'Oreos') {
@@ -433,42 +430,55 @@
                 dessertOption = { name: 'Cake Mix & Frosting', description: 'Cake mix, frosting, candles' };
             }
             
+            const childName = boxData.child_name || 'Child';
+            const theme = boxData.theme || '';
+            const age = boxData.age || '';
+            const gender = boxData.gender || '';
+            const language = boxData.language || 'English';
+            const colors = boxData.colors || '';
+            const allergies = boxData.allergies || '';
+            const giftIdeas = boxData.gift_ideas || '';
+            const sizes = boxData.sizes || '';
+            const volunteerNotes = boxData.volunteer_notes || '';
+            const dropOffLocation = boxData.drop_off_location || '';
+            const dueDate = boxData.due_date || '';
+            
             content.innerHTML = `
                 <div class="child-info">
-                    <h2>${boxData.child_name} - ${boxData.theme}</h2>
+                    <h2>${childName} - ${theme}</h2>
                     <div class="info-grid">
                         <div class="info-item">
                             <span class="info-label">Age Turning</span>
-                            <span class="info-value">${boxData.age}</span>
+                            <span class="info-value">${age}</span>
                         </div>
                         <div class="info-item">
                             <span class="info-label">Gender</span>
-                            <span class="info-value">${boxData.gender}</span>
+                            <span class="info-value">${gender}</span>
                         </div>
                         <div class="info-item">
                             <span class="info-label">Language</span>
-                            <span class="info-value">${boxData.language}</span>
+                            <span class="info-value">${language}</span>
                         </div>
                         <div class="info-item">
                             <span class="info-label">Theme Colors</span>
-                            <span class="info-value">${boxData.colors}</span>
+                            <span class="info-value">${colors}</span>
                         </div>
                     </div>
-                    ${boxData.allergies ? `<div class="info-item" style="margin-top: 10px;"><span class="info-label">Allergies</span><span class="info-value">${boxData.allergies}</span></div>` : ''}
-                    ${boxData.gift_ideas ? `<div class="info-item" style="margin-top: 10px;"><span class="info-label">Gift Ideas</span><span class="info-value">${boxData.gift_ideas}</span></div>` : ''}
-                    ${boxData.sizes ? `<div class="info-item" style="margin-top: 10px;"><span class="info-label">Sizes</span><span class="info-value">${boxData.sizes}</span></div>` : ''}
-                    ${boxData.volunteer_notes ? `<div class="info-item" style="margin-top: 10px;"><span class="info-label">Notes for Volunteers</span><span class="info-value">${boxData.volunteer_notes}</span></div>` : ''}
+                    ${allergies ? `<div class="info-item" style="margin-top: 10px;"><span class="info-label">Allergies</span><span class="info-value">${allergies}</span></div>` : ''}
+                    ${giftIdeas ? `<div class="info-item" style="margin-top: 10px;"><span class="info-label">Gift Ideas</span><span class="info-value">${giftIdeas}</span></div>` : ''}
+                    ${sizes ? `<div class="info-item" style="margin-top: 10px;"><span class="info-label">Sizes</span><span class="info-value">${sizes}</span></div>` : ''}
+                    ${volunteerNotes ? `<div class="info-item" style="margin-top: 10px;"><span class="info-label">Notes for Volunteers</span><span class="info-value">${volunteerNotes}</span></div>` : ''}
                     
                     <div class="drop-off-info">
                         <strong>📍 Preferred Drop-Off Location:</strong>
-                        ${boxData.drop_off_location}<br><br>
+                        ${dropOffLocation}<br><br>
                         <strong>Other drop-off locations:</strong><br>
-                        ${boxData.drop_off_location.includes('Country Grove') ? '- (EAST) 6229 Dominion Dr, Madison, WI 53718 (box outside on front porch)' : '- (WEST) 3506 Country Grove Dr, Madison, WI 53719 (box outside on front porch)'}<br><br>
+                        ${dropOffLocation.includes('Country Grove') ? '- (EAST) 6229 Dominion Dr, Madison, WI 53718 (box outside on front porch)' : '- (WEST) 3506 Country Grove Dr, Madison, WI 53719 (box outside on front porch)'}<br><br>
                         <small style="color: #666;">Please drop off cupcakes at the preferred drop off location. All other supplies can be dropped off at any location or you can ship supplies directly to these addresses.</small>
                     </div>
                     <div style="margin-top: 15px; padding: 12px; background: #fff9e6; border-radius: 6px;">
                         <strong style="color: #f57c00;">📅 Supplies Due:</strong>
-                        ${formatDate(boxData.due_date)}
+                        ${dueDate}
                     </div>
                 </div>
                 
@@ -476,7 +486,7 @@
                 <div class="error-message" id="errorMessage"></div>
                 
                 <div id="supplyList">
-                    ${renderSupplyItems(boxData.needed_items, dessertOption)}
+                    ${renderSupplyItems(neededItems, dessertOption)}
                 </div>
                 
                 <div class="volunteer-form" id="volunteerForm" style="display: none;">
@@ -626,11 +636,12 @@
         
         function showSuccess() {
             const content = document.getElementById('mainContent');
+            const childName = boxData.child_name || 'this child';
             content.innerHTML = `
                 <div class="success-message">
                     <h2>🎉 Thank you for signing up!</h2>
                     <p style="margin-top: 15px;">You'll receive a reminder email 2 days before the supplies are due.</p>
-                    <p style="margin-top: 10px;">We truly appreciate your support in making ${boxData.child_name}'s birthday special!</p>
+                    <p style="margin-top: 10px;">We truly appreciate your support in making ${childName}'s birthday special!</p>
                     <p style="margin-top: 15px;">For inspiration, check out our <a href="https://www.facebook.com/MadisonBirthdayBoost" target="_blank" style="color: #3AAFB9; font-weight: 600; text-decoration: underline;">Facebook page</a> for pictures of past celebrations!</p>
                 </div>
             `;
