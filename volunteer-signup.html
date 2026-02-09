@@ -546,34 +546,29 @@
             document.getElementById('submitBtn').addEventListener('click', handleSubmit);
         }
         
-        function renderSupplyItems(neededItems, dessertOption) {
-            const items = [];
-            
-            if (neededItems.includes('tableware')) items.push(renderSupplyItem('tableware', SUPPLY_CATEGORIES.tableware));
-            if (neededItems.includes('activity')) items.push(renderSupplyItem('activity', SUPPLY_CATEGORIES.activity));
-            if (neededItems.includes('decorations')) items.push(renderSupplyItem('decorations', SUPPLY_CATEGORIES.decorations));
-            if (neededItems.includes('party_favors')) items.push(renderSupplyItem('party_favors', SUPPLY_CATEGORIES.party_favors));
-            if (neededItems.includes('diy_decorations')) items.push(renderSupplyItem('diy_decorations', SUPPLY_CATEGORIES.diy_decorations));
-            if (neededItems.includes('unwrapped_gift')) items.push(renderSupplyItem('unwrapped_gift', SUPPLY_CATEGORIES.unwrapped_gift));
-            if (neededItems.includes('box_decorations')) items.push(renderSupplyItem('box_decorations', SUPPLY_CATEGORIES.box_decorations));
-            if (neededItems.includes('dessert')) items.push(renderSupplyItem('dessert', dessertOption));
-            
-            return items.join('');
-        }
-        
-        function renderSupplyItem(id, category) {
-            return `
-                <div class="supply-item">
-                    <label>
-                        <input type="checkbox" value="${id}">
-                        <div class="supply-content">
-                            <div class="supply-name">${category.name}</div>
-                            <div class="supply-description">${category.description}</div>
-                        </div>
-                    </label>
-                </div>
-            `;
-        }
+function renderSupplyItems(neededItems, dessertOption) {
+    const items = [];
+    
+    // Get already claimed items
+    const claimedItems = boxData.claimed_items ? 
+        (typeof boxData.claimed_items === 'string' ? boxData.claimed_items.split(',').map(i => i.trim()) : boxData.claimed_items) : 
+        [];
+    
+    if (neededItems.includes('tableware') && !claimedItems.includes('tableware')) items.push(renderSupplyItem('tableware', SUPPLY_CATEGORIES.tableware));
+    if (neededItems.includes('activity') && !claimedItems.includes('activity')) items.push(renderSupplyItem('activity', SUPPLY_CATEGORIES.activity));
+    if (neededItems.includes('decorations') && !claimedItems.includes('decorations')) items.push(renderSupplyItem('decorations', SUPPLY_CATEGORIES.decorations));
+    if (neededItems.includes('party_favors') && !claimedItems.includes('party_favors')) items.push(renderSupplyItem('party_favors', SUPPLY_CATEGORIES.party_favors));
+    if (neededItems.includes('diy_decorations') && !claimedItems.includes('diy_decorations')) items.push(renderSupplyItem('diy_decorations', SUPPLY_CATEGORIES.diy_decorations));
+    if (neededItems.includes('unwrapped_gift') && !claimedItems.includes('unwrapped_gift')) items.push(renderSupplyItem('unwrapped_gift', SUPPLY_CATEGORIES.unwrapped_gift));
+    if (neededItems.includes('box_decorations') && !claimedItems.includes('box_decorations')) items.push(renderSupplyItem('box_decorations', SUPPLY_CATEGORIES.box_decorations));
+    if (neededItems.includes('dessert') && !claimedItems.includes('dessert')) items.push(renderSupplyItem('dessert', dessertOption));
+    
+    if (items.length === 0) {
+        return '<p style="text-align: center; padding: 20px; color: #666;">All items have been claimed! Thank you for your interest.</p>';
+    }
+    
+    return items.join('');
+}
         
         async function handleSubmit() {
             const firstName = document.getElementById('firstName').value.trim();
